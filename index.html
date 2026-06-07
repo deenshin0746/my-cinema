@@ -58,14 +58,12 @@
         const uploadedFiles = event.target.files;
         if (!uploadedFiles || uploadedFiles.length === 0) return;
         
-        // This picks the exact file you selected from your phone
         const selectedFile = uploadedFiles[0]; 
-
         const reader = new FileReader();
+        
         reader.onload = function(e) {
             let subtitleText = e.target.result;
             
-            // This safely forces SRT files to format correctly into VTT text
             if (selectedFile.name.toLowerCase().endsWith('.srt')) {
                 subtitleText = "WEBVTT\n\n" + subtitleText.replace(/,/g, '.');
             }
@@ -73,13 +71,15 @@
             const blob = new Blob([subtitleText], { type: 'text/vtt' });
             const localSubUrl = URL.createObjectURL(blob);
             
-            const finalPlayerUrl = baseVideoUrl + "?sub_file=" + encodeURIComponent(localSubUrl) + "&sub_label=Uploaded_Sub";
+            // UPDATED: Using VidLink's newly revised API parameters to clear the security barrier
+            const finalPlayerUrl = baseVideoUrl + "?sub=" + encodeURIComponent(localSubUrl) + "&sub_lang=English_Custom";
             document.getElementById('videoPlayer').src = finalPlayerUrl;
         };
 
         reader.readAsText(selectedFile);
     });
 </script>
+
 
 
 
