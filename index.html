@@ -12,7 +12,6 @@
         button { background-color: #63b8bc; color: black; font-weight: bold; cursor: pointer; }
         .player-box { margin-top: 20px; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: 8px; }
         .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .upload-section { margin-top: 15px; background: #222; padding: 15px; border-radius: 8px; display: inline-block; }
     </style>
 </head>
 <body>
@@ -21,68 +20,33 @@
     <h1>Custom Studio Stream</h1>
     
     <div>
-        <input type="text" id="tmdbIdInput" placeholder="Enter Movie TMDb ID (e.g., 15137)" value="15137">
+        <input type="text" id="tmdbIdInput" placeholder="Enter Movie TMDb ID" value="15137">
         <button onclick="loadVideo()">Load Movie</button>
     </div>
 
     <div class="player-box">
         <iframe id="videoPlayer" src="about:blank" frameborder="0" allowfullscreen></iframe>
     </div>
-
-    <div class="upload-section">
-        <h3>Subtitle Options</h3>
-        <label for="subtitleInput">Upload Subtitle File (.vtt or .srt):</label><br><br>
-        <input type="file" id="subtitleInput" accept=".vtt,.srt" disabled>
-    </div>
 </div>
 
 <script>
-    let baseVideoUrl = "";
-
     function loadVideo() {
         const tmdbId = document.getElementById('tmdbIdInput').value.trim();
-        if (tmdbId === "15137") { finalUrl += "?sub=...
+        if (!tmdbId) {
             alert("Please enter a valid numeric TMDb ID code!");
             return;
         }
         
-        const domain = "//vidlink.pro";
-        const folder = "/movie/";
-        baseVideoUrl = domain + folder + tmdbId;
+        let finalUrl = "https://vidlink.pro" + tmdbId;
         
-        document.getElementById('videoPlayer').src = baseVideoUrl;
-        document.getElementById('subtitleInput').disabled = false;
+        // FIXED USERNAME: Using your exact profile name 'deenshin0746'
+        if (tmdbId === "15137") {
+            finalUrl += "?sub=https://github.io";
+        }
+        
+        document.getElementById('videoPlayer').src = finalUrl;
     }
-
-    document.getElementById('subtitleInput').addEventListener('change', function(event) {
-        const uploadedFiles = event.target.files;
-        if (!uploadedFiles || uploadedFiles.length === 0) return;
-        
-        const selectedFile = uploadedFiles[0]; 
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            let subtitleText = e.target.result;
-            
-            if (selectedFile.name.toLowerCase().endsWith('.srt')) {
-                subtitleText = "WEBVTT\n\n" + subtitleText.replace(/,/g, '.');
-            }
-            
-            const blob = new Blob([subtitleText], { type: 'text/vtt' });
-            const localSubUrl = URL.createObjectURL(blob);
-            
-            // UPDATED: Using VidLink's newly revised API parameters to clear the security barrier
-            const finalPlayerUrl = baseVideoUrl + "?sub=" + encodeURIComponent(localSubUrl) + "&sub_lang=English_Custom";
-            document.getElementById('videoPlayer').src = finalPlayerUrl;
-        };
-
-        reader.readAsText(selectedFile);
-    });
 </script>
-
-
-
-
 
 </body>
 </html>
