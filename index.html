@@ -37,11 +37,13 @@
             return;
         }
         
+        // Step 1: Base Player Link Destination
         let finalUrl = "https://vidlink.pro" + tmdbId;
         
-        // FIXED USERNAME: Using your exact profile name 'deenshin0746'
+        // Step 2: Clear and re-encode parameters safely so the firewall verifies the request
         if (tmdbId === "15137") {
-            finalUrl += "?sub=https://github.io";
+            const subUrl = "https://github.io";
+            finalUrl = finalUrl + "?sub=" + encodeURIComponent(subUrl) + "&sub_lang=English_Custom";
         }
         
         document.getElementById('videoPlayer').src = finalUrl;
