@@ -11,7 +11,8 @@
         input[type="text"] { width: 250px; }
         button { background-color: #63b8bc; color: black; font-weight: bold; cursor: pointer; }
         .player-box { margin-top: 20px; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: 8px; }
-        .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        /* Style the iframe element directly to fit our wrapper box */
+        .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
@@ -24,9 +25,8 @@
         <button onclick="loadVideo()">Load Movie</button>
     </div>
 
-    <div class="player-box">
-        <iframe id="videoPlayer" src="about:blank" frameborder="0" allowfullscreen></iframe>
-    </div>
+    <!-- The container wrapper box stays, but we will inject the iframe dynamically -->
+    <div class="player-box" id="playerWrapper"></div>
 </div>
 
 <script>
@@ -37,17 +37,26 @@
             return;
         }
         
-        // This stops your browser from ever gluing strings improperly again
         const mainSite = "https://vidlink.pro";
         const movieFolder = "/movie/";
         let finalUrl = mainSite + movieFolder + tmdbId;
         
         if (tmdbId === "15137") {
+            // Your exact live subtitle file link hosted securely on your GitHub domain
             const subFileUrl = "https://github.io";
             finalUrl = finalUrl + "?sub=" + encodeURIComponent(subFileUrl) + "&sub_lang=English_Custom";
         }
         
-        document.getElementById('videoPlayer').src = finalUrl;
+        // FIX: Completely wipe out the player box and rebuild the iframe from scratch.
+        // This forces VidLink's engine to read your subtitle link the exact millisecond it wakes up!
+        const wrapper = document.getElementById('playerWrapper');
+        wrapper.innerHTML = ""; // Clear old player frame
+        
+        const newIframe = document.createElement('iframe');
+        newIframe.src = finalUrl;
+        newIframe.setAttribute('allowfullscreen', 'true');
+        
+        wrapper.appendChild(newIframe);
     }
 </script>
 
