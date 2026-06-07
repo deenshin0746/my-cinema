@@ -37,13 +37,14 @@
             return;
         }
         
-        // Step 1: Base Player Link Destination
-        let finalUrl = "https://vidlink.pro" + tmdbId;
+        // This stops your browser from ever gluing strings improperly again
+        const mainSite = "https://vidlink.pro";
+        const movieFolder = "/movie/";
+        let finalUrl = mainSite + movieFolder + tmdbId;
         
-        // Step 2: Clear and re-encode parameters safely so the firewall verifies the request
         if (tmdbId === "15137") {
-            const subUrl = "https://github.io";
-            finalUrl = finalUrl + "?sub=" + encodeURIComponent(subUrl) + "&sub_lang=English_Custom";
+            const subFileUrl = "https://github.io";
+            finalUrl = finalUrl + "?sub=" + encodeURIComponent(subFileUrl) + "&sub_lang=English_Custom";
         }
         
         document.getElementById('videoPlayer').src = finalUrl;
