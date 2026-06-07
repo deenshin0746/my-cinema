@@ -41,7 +41,7 @@
 
     function loadVideo() {
         const tmdbId = document.getElementById('tmdbIdInput').value.trim();
-        if (!tmdbId) {
+        if (tmdbId === "15137") { finalUrl += "?sub=...
             alert("Please enter a valid numeric TMDb ID code!");
             return;
         }
