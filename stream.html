@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Movie Player</title>
+    <style>
+        body { background-color: #111; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        input, button { padding: 10px; margin: 5px; border-radius: 5px; border: none; font-size: 16px; }
+        input[type="text"] { width: 250px; }
+        button { background-color: #63b8bc; color: black; font-weight: bold; cursor: pointer; }
+        .player-box { margin-top: 20px; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: 8px; }
+        .player-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Custom Studio Stream</h1>
+    
+    <div>
+        <input type="text" id="tmdbIdInput" placeholder="Enter Movie TMDb ID" value="15137">
+        <button onclick="loadVideo()">Load Movie</button>
+    </div>
+
+    <div class="player-box">
+        <iframe id="videoPlayer" src="about:blank" frameborder="0" allowfullscreen></iframe>
+    </div>
+</div>
+
+<script>
+    function loadVideo() {
+        const tmdbId = document.getElementById('tmdbIdInput').value.trim();
+        if (!tmdbId) {
+            alert("Please enter a valid numeric TMDb ID code!");
+            return;
+        }
+        
+        // This format is fully split apart so it can NEVER accidentally squish together again
+        const mainSite = "https://vidlink.pro";
+        const movieFolder = "/movie/";
+        let finalUrl = mainSite + movieFolder + tmdbId;
+        
+        if (tmdbId === "15137") {
+            const subFileUrl = "https://github.io";
+            finalUrl = finalUrl + "?sub=" + encodeURIComponent(subFileUrl) + "&sub_lang=English_Custom";
+        }
+        
+        document.getElementById('videoPlayer').src = finalUrl;
+    }
+</script>
+
+</body>
+</html>
